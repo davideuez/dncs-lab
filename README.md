@@ -4,22 +4,22 @@ Design of Networks and Communication Systems, University of Trento. The team is 
 
 ## Contents:
 
-- [Network map](Network-map)
-- [Design Requirements](Design-requirements)
-- [Our solution for the project](Our-solution-for-the-project)
-  - [Subnetting](Subnetting)
-  - [Assign IP addresses](Assign-IP-Adresses)
-  - [Set a VLAN](Set-a-VLAN)
-  - [Updated Network map with IP's and VLAN](Updated-Network-map-with-IP's-and-VLAN)
-- [Configuring the network](Configuring-the-network)
-  - [router-1.sh](ROUTER-1)
-  - [router-2.sh](ROUTER-2)
-  - [switch.sh](SWITCH)
-  - [host-a.sh](HOST-A)
-  - [host-b.sh](HOST-B)
-  - [host-c.sh](HOST-C)
-- [How to test](How-to-test)
-- [Final comments](Final-comments)
+- [Network map](#Network-map)
+- [Design Requirements](#Design-requirements)
+- [Our solution for the project](#Our-solution-for-the-project)
+  - [Subnetting](#Subnetting)
+  - [Assign IP addresses](#Assign-IP-Adresses)
+  - [Set a VLAN](#Set-a-VLAN)
+  - [Updated Network map with IP's and VLAN](#Updated-Network-map-with-IP's-and-VLAN)
+- [Configuring the network](#Configuring-the-network)
+  - [router-1.sh](#ROUTER-1)
+  - [router-2.sh](#ROUTER-2)
+  - [switch.sh](#SWITCH)
+  - [host-a.sh](#HOST-A)
+  - [host-b.sh](#HOST-B)
+  - [host-c.sh](#HOST-C)
+- [How to test](#How-to-test)
+- [Final comments](#Final-comments)
 
 
  # Network map
