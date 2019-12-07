@@ -11,6 +11,7 @@ Design of Networks and Communication Systems, University of Trento. The team is 
   - [Assign IP addresses](#Assign-IP-Adresses)
   - [Set a VLAN](#Set-a-VLAN)
   - [Updated Network map with IP's and VLAN](#Updated-Network-map-with-IP's-and-VLAN)
+- [Vagrantfile](#Vagranfile)
 - [Configuring the network](#Configuring-the-network)
   - [router-1.sh](#ROUTER-1)
   - [router-2.sh](#ROUTER-2)
@@ -168,6 +169,26 @@ We decided to use vlans for the networks "*Hosts-A*" and "*Hosts-B*", so we can 
 
 
 ```
+
+# Vagrantfile
+
+This is an example extract from the Vagrantfile, that show how Vagrant create a new VM, based on our settings.
+
+We modified 2 things:
+- at line 5 we change the path of the .sh file for every VM, linking the correct configuration file for every machine
+- at line 7 we increase the memory just for Host-c, because it is "hosting" the docker and need a bit more energy
+
+```
+1   config.vm.define "host-c" do |hostc|
+2       hostc.vm.box = "ubuntu/bionic64"
+3       hostc.vm.hostname = "host-c"
+4       hostc.vm.network "private_network", virtualbox__intnet: "broadcast_router-south-2", auto_config: false
+5       hostc.vm.provision "shell", path: "host-c.sh"
+6       hostc.vm.provider "virtualbox" do |vb|
+7         vb.memory = 512
+```
+
+
 
 # Configuring the network
 
@@ -362,3 +383,113 @@ What does this code mean?
 2. First clean and then run docker image "dustnic82/nginx-test"
 3. Add IP address to the interface and set it "up"
 4. Both lines are used to create static routes to reach subnet "Hosts-A" and "Hosts-B" via router-2
+
+# How to test
+
+1. Install [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/)
+2. Clone this repository in your computer, using "Download ZIP" or using the "git clone" command
+3. Open a terminal and navigate to the folder that you installed (using the command "cd") and then use the command ```vagrant up``` to start generating all the Virtual Machines. This process can take several minutes to install all VMs.
+4. Once the terminal has ended all the process of installation, you can check if everything is working fine using the command ```vagrant status```. It should return these lines:
+
+```
+Current machine states:
+
+router-1                  running (virtualbox)
+router-2                  running (virtualbox)
+switch                    running (virtualbox)
+host-a                    running (virtualbox)
+host-b                    running (virtualbox)
+host-c                    running (virtualbox)
+```
+
+If your terminal display something different just uninstall the setup with ```vagrant destroy``` and try the installation process again.
+
+5. Once your environment is up and running you can log into every single VM just by typing ```vagrant ssh VMname``` , changing "VMname" with the name of the VM which you want to move into. For example if you want to navigate to router-1 you have to type:
+
+```
+vagrant ssh router-1
+```
+
+and this will display some information about the VM
+
+```
+Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-66-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sat Dec  7 17:04:36 UTC 2019
+
+  System load:  0.0               Processes:             86
+  Usage of /:   11.5% of 9.63GB   Users logged in:       1
+  Memory usage: 49%               IP address for enp0s3: 10.0.2.15
+  Swap usage:   0%                IP address for enp0s9: 10.0.12.1
+
+
+56 packages can be updated.
+30 updates are security updates.
+
+
+Last login: Sat Dec  7 16:46:00 2019 from 10.0.2.2
+```
+
+6. For every VM we can use the command ```ifconfig``` to display the list of all Ethernet interfaces on the host, with their own options. This is an example on router-1:
+
+```
+enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255
+        inet6 fe80::c7:16ff:fecf:8450  prefixlen 64  scopeid 0x20<link>
+        ether 02:c7:16:cf:84:50  txqueuelen 1000  (Ethernet)
+        RX packets 22936  bytes 20024745 (20.0 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 9395  bytes 669513 (669.5 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s8: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet6 fe80::a00:27ff:fe1c:f642  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:1c:f6:42  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 43  bytes 3298 (3.2 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s9: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.12.1  netmask 255.255.255.252  broadcast 0.0.0.0
+        inet6 fe80::a00:27ff:fed7:1ff3  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:d7:1f:f3  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 15  bytes 1146 (1.1 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s8.5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.0.1  netmask 255.255.252.0  broadcast 0.0.0.0
+        inet6 fe80::a00:27ff:fe1c:f642  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:1c:f6:42  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 14  bytes 1076 (1.0 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s8.6: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.4.1  netmask 255.255.255.0  broadcast 0.0.0.0
+        inet6 fe80::a00:27ff:fe1c:f642  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:1c:f6:42  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 15  bytes 1146 (1.1 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 44  bytes 4402 (4.4 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 44  bytes 4402 (4.4 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+7. tcpdump
+8. route -nve

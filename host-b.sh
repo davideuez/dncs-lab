@@ -1,5 +1,6 @@
 export DEBIAN_FRONTEND=noninteractive
 sudo su
+apt-get update
 
 # adds IP address to the interface and set it "up"
 ip add add 10.0.4.2/24 dev enp0s8

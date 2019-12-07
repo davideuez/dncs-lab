@@ -1,5 +1,6 @@
 export DEBIAN_FRONTEND=noninteractive
 sudo su
+apt-get update
 
 # enable IP forwarding
 sysctl net.ipv4.ip_forward=1 
