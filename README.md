@@ -20,7 +20,7 @@ Design of Networks and Communication Systems, University of Trento. The team is 
   - [host-b.sh](#HOST-B)
   - [host-c.sh](#HOST-C)
 - [How to test](#How-to-test)
-- [Final comments](#Final-comments)
+- [Members and repository information](#Members-and-repository-information)
 
 
  # Network map
@@ -563,7 +563,7 @@ Commercial support is available at
 
 You can copy the text from **!DOCTYPE html** to **/html** and paste it on an editor. Then save the file with .html extension and open it with a browser (Google Chrome, Safari, Opera, ...)
 
-# Members and repo info
+# Members and repository information
 
 This project for the course "Design of Networks and Communication System" was done by **Davide Uez** and **Luca Calearo**. 
 
