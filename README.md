@@ -197,74 +197,84 @@ We modified 2 things:
 ```
 export DEBIAN_FRONTEND=noninteractive
 sudo su
+apt-get update
 
 # 1
-sysctl net.ipv4.ip_forward=1
+apt-get install -y tcpdump --assume-yes
 
 # 2
+sysctl net.ipv4.ip_forward=1
+
+# 3
 ip add add 10.0.12.1/30 dev enp0s9
 ip link set enp0s9 up
 
-# 3
+# 4
 ip link add link enp0s8 name enp0s8.5 type vlan id 5
 ip add add 10.0.0.1/22 dev enp0s8.5
 
-# 4
+# 5
 ip link add link enp0s8 name enp0s8.6 type vlan id 6
 ip add add 10.0.4.1/24 dev enp0s8.6
 
-# 5
+# 6
 ip link set enp0s8 up
 ip link set enp0s8.5 up
 ip link set enp0s8.6
 
-# 6
+# 7
 ip route del default
 
-# 7
+# 8
 ip route add 10.0.8.0/22 via 10.0.12.2 dev enp0s9
 ```
 
 What does this code mean?
 
-1. Enable IP forwarding
-2. Add IP address to the interface linked to router-2 and set it "up"
-3. Create a subinterface for VLAN 5
-4. Create a subinterfaces for VLAN 6
-5. Set interfaces towards the switch up
-6. Delete the default gateway
-7. Create a static route to reach subnet "Hub" (where there is Host-c) via router-2
+1. Installing tcpdump for debug and sniffing purposes
+2. Enable IP forwarding
+3. Add IP address to the interface linked to router-2 and set it "up"
+4. Create a subinterface for VLAN 5
+5. Create a subinterfaces for VLAN 6
+6. Set interfaces towards the switch up
+7. Delete the default gateway
+8. Create a static route to reach subnet "Hub" (where there is Host-c) via router-2
 
 ## ROUTER-2
 
 ```
 export DEBIAN_FRONTEND=noninteractive
 sudo su
+apt-get update
 
 # 1
-sysctl net.ipv4.ip_forward=1 
+apt-get install -y tcpdump --assume-yes
 
 # 2
+sysctl net.ipv4.ip_forward=1 
+
+# 3
 ip add add 10.0.8.1/22 dev enp0s8
 ip add add 10.0.12.2/30 dev enp0s9
 ip link set enp0s8 up
 ip link set enp0s9 up
 
 
-# 3
+# 4
 ip route del default
 
-# 4
+# 5
 ip route add 10.0.0.0/22 via 10.0.12.1 dev enp0s9
 ip route add 10.0.4.0/24 via 10.0.12.1 dev enp0s9
 ```
 
 What does this code mean?
 
-1. Enable IP forwarding
-2. Add IP address to the interfaces and set them "up"
-3. Delete the dafault gateway
-4. Both lines are used to create static routes to reach subnet "Hosts-A" and "Hosts-B" via router-1
+1. Installing tcpdump for debug and sniffing purposes
+2. Enable IP forwarding
+3. Add IP address to the interfaces and set them "up"
+4. Delete the dafault gateway
+5. Both lines are used to create static routes to reach subnet "Hosts-A" and "Hosts-B" via router-1
 
 ## SWITCH
 
@@ -307,46 +317,56 @@ What does this code mean?
 ```
 export DEBIAN_FRONTEND=noninteractive
 sudo su
+apt-get update
 
 # 1
+apt-get install -y tcpdump --assume-yes
+
+# 2
 ip add add 10.0.0.2/22 dev enp0s8
 ip link set enp0s8 up
 
-# 2
+# 3
 ip route del default
 
-# 3
+# 4
 ip route add default via 10.0.0.1
 ```
 
 What does this code mean?
 
-1. Add IP address to the interface and set it "up"
-2. Delete the default gateway
-3. Sets the default gateway on router-1
+1. Installing tcpdump for debug and sniffing purposes
+2. Add IP address to the interface and set it "up"
+3. Delete the default gateway
+4. Sets the default gateway on router-1
 
 ## HOST-B
 
 ```
 export DEBIAN_FRONTEND=noninteractive
 sudo su
+apt-get update
 
 # 1
+apt-get install -y tcpdump --assume-yes
+
+# 2
 ip add add 10.0.4.2/24 dev enp0s8
 ip link set enp0s8 up
 
-# 2
+# 3
 ip route del default
 
-# 3
+# 4
 ip route add default via 10.0.4.1
 ```
 
 What does this code mean?
 
-1. Add IP address to the interface and set it "up"
-2. Delete the default gateway
-3. Sets the default gateway on router-1
+1. Installing tcpdump for debug and sniffing purposes
+2. Add IP address to the interface and set it "up"
+3. Delete the default gateway
+4. Sets the default gateway on router-1
 
 ## HOST-C
 
@@ -434,62 +454,71 @@ Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-66-generic x86_64)
 Last login: Sat Dec  7 16:46:00 2019 from 10.0.2.2
 ```
 
-6. For every VM we can use the command ```ifconfig``` to display the list of all Ethernet interfaces on the host, with their own options. This is an example on router-1:
+6. For every VM we can use the command ```ifconfig``` to display the list of all Ethernet interfaces on the host, with their own options. This is an example on host-a:
 
 ```
 enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255
         inet6 fe80::c7:16ff:fecf:8450  prefixlen 64  scopeid 0x20<link>
         ether 02:c7:16:cf:84:50  txqueuelen 1000  (Ethernet)
-        RX packets 22936  bytes 20024745 (20.0 MB)
+        RX packets 18345  bytes 19768910 (19.7 MB)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 9395  bytes 669513 (669.5 KB)
+        TX packets 5065  bytes 398557 (398.5 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 enp0s8: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet6 fe80::a00:27ff:fe1c:f642  prefixlen 64  scopeid 0x20<link>
-        ether 08:00:27:1c:f6:42  txqueuelen 1000  (Ethernet)
+        inet 10.0.0.2  netmask 255.255.252.0  broadcast 0.0.0.0
+        inet6 fe80::a00:27ff:fe69:bb41  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:69:bb:41  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 43  bytes 3298 (3.2 KB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-enp0s9: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.0.12.1  netmask 255.255.255.252  broadcast 0.0.0.0
-        inet6 fe80::a00:27ff:fed7:1ff3  prefixlen 64  scopeid 0x20<link>
-        ether 08:00:27:d7:1f:f3  txqueuelen 1000  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 15  bytes 1146 (1.1 KB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-enp0s8.5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.0.0.1  netmask 255.255.252.0  broadcast 0.0.0.0
-        inet6 fe80::a00:27ff:fe1c:f642  prefixlen 64  scopeid 0x20<link>
-        ether 08:00:27:1c:f6:42  txqueuelen 1000  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 14  bytes 1076 (1.0 KB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-enp0s8.6: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.0.4.1  netmask 255.255.255.0  broadcast 0.0.0.0
-        inet6 fe80::a00:27ff:fe1c:f642  prefixlen 64  scopeid 0x20<link>
-        ether 08:00:27:1c:f6:42  txqueuelen 1000  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 15  bytes 1146 (1.1 KB)
+        TX packets 13  bytes 1006 (1.0 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         inet 127.0.0.1  netmask 255.0.0.0
         inet6 ::1  prefixlen 128  scopeid 0x10<host>
         loop  txqueuelen 1000  (Local Loopback)
-        RX packets 44  bytes 4402 (4.4 KB)
+        RX packets 32  bytes 3338 (3.3 KB)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 44  bytes 4402 (4.4 KB)
+        TX packets 32  bytes 3338 (3.3 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-7. tcpdump
-8. route -nve
+Here we have "enp0s3" that links our VM to the Ethernet card of our PC; enp0s8 is the interface that link the host-a with the switch and "lo" is an imaginary interface, that is briefly, the local-host 
+
+7. ```route -nve``` 
+
+This command show on the terminal the routing table of the VM. This is an example of the command on host-a:
+
+```
+vagrant@host-a:~$ route -nve
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         10.0.0.1        0.0.0.0         UG        0 0          0 enp0s8
+10.0.0.0        0.0.0.0         255.255.252.0   U         0 0          0 enp0s8
+10.0.2.0        0.0.0.0         255.255.255.0   U         0 0          0 enp0s3
+10.0.2.2        0.0.0.0         255.255.255.255 UH        0 0          0 enp0s3
+```
+
+8. ```ping IPaddress```
+
+In this command you have to change "IPaddress" with the actual IP address of the interface you want to reach. For example if you want to ping host-c from host-a you have to type on terminal ```ping 10.0.8.2``` and this is the output:
+
+```
+vagrant@host-a:~$ ping 10.0.8.2
+PING 10.0.8.2 (10.0.8.2) 56(84) bytes of data.
+64 bytes from 10.0.8.2: icmp_seq=1 ttl=62 time=1.92 ms
+64 bytes from 10.0.8.2: icmp_seq=2 ttl=62 time=1.53 ms
+64 bytes from 10.0.8.2: icmp_seq=3 ttl=62 time=1.24 ms
+64 bytes from 10.0.8.2: icmp_seq=4 ttl=62 time=1.38 ms
+64 bytes from 10.0.8.2: icmp_seq=5 ttl=62 time=1.58 ms
+64 bytes from 10.0.8.2: icmp_seq=6 ttl=62 time=1.67 ms
+64 bytes from 10.0.8.2: icmp_seq=7 ttl=62 time=2.02 ms
+^C
+--- 10.0.8.2 ping statistics ---
+7 packets transmitted, 7 received, 0% packet loss, time 6017ms
+rtt min/avg/max/mdev = 1.249/1.624/2.021/0.261 ms
+```
+
+9. curl

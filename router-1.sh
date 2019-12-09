@@ -2,6 +2,9 @@ export DEBIAN_FRONTEND=noninteractive
 sudo su
 apt-get update
 
+# installing tcpdump
+apt-get install -y tcpdump --assume-yes
+
 # enable IP forwarding
 sysctl net.ipv4.ip_forward=1
 
