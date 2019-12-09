@@ -501,7 +501,7 @@ Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
 10.0.2.2        0.0.0.0         255.255.255.255 UH        0 0          0 enp0s3
 ```
 
-8. ```ping IPaddress```
+8. ```ping "IPaddress"```
 
 In this command you have to change "IPaddress" with the actual IP address of the interface you want to reach. For example if you want to ping host-c from host-a you have to type on terminal ```ping 10.0.8.2``` and this is the output:
 
@@ -521,4 +521,50 @@ PING 10.0.8.2 (10.0.8.2) 56(84) bytes of data.
 rtt min/avg/max/mdev = 1.249/1.624/2.021/0.261 ms
 ```
 
-9. curl
+9. ```tcpdump -i "InterfaceName"```
+
+In this command you have to change "InterfaceName" with the name of the interface where you want to sniff packets that are passing through it. In this example we ping host-c from host-a meanwhile switch, router-1 and router-2 are sniffing packets on enp0s8 and enp0s9:
+
+![Tcpdump image](https://github.com/davideuez/dncs-lab/blob/master/screenshots/tcpdump.png)
+
+10. ```curl 10.0.8.2```
+
+From host-a or host-b you can retrieve data of a web-page (dustnic82/nginx-test) hosted in host-2-c that will be browsed on terminal. This is an example of the command on host-a:
+
+```
+vagrant@host-a:~$ curl 10.0.8.2
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+```
+
+You can copy the text from **!DOCTYPE html** to **/html** and paste it on an editor. Then save the file with .html extension and open it with a browser (Google Chrome, Safari, Opera, ...)
+
+# Members and repo info
+
+This project for the course "Design of Networks and Communication System" was done by **Davide Uez** and **Luca Calearo**. 
+
+We started the project by forking this repository: [https://github.com/dustnic/dncs-lab](https://github.com/dustnic/dncs-lab).
