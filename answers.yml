@@ -1,0 +1,18 @@
+FirstName: Davide
+LastName: Uez
+MatriculationNumber: 192892
+AcademicYear: 2019-2020
+GitHubUrl: https://github.com/davideuez/dncs-lab
+Subnets:
+  HostsA:
+    RequiredAddresses: 511
+    SubnetAddress: 10.0.0.0
+    SubnetPrefixLength: 255.255.252.0
+  HostsB:
+    RequiredAddresses: 182
+    SubnetAddress: 10.0.4.0
+    SubnetPrefixLength: 255.255.255.0
+  Hub:
+    RequiredAddresses: 511
+    SubnetAddress: 10.0.8.0
+    SubnetPrefixLength: 255.255.252.0
