@@ -108,8 +108,8 @@ Number of available IPs for network = ((2^X)-2)
 ```
 
 - **X** refers to the number of bits dedicated to the **host part**.
-For our "*Hosts-a*" subnet we chose to assign (32-22=10) 10 bits for the hosts part, so that the number of ip available was closer to the one ask in the requirements
-- "-2" is because in every network there are 2 unavailable ip, one for network and oen for broadcast
+For our "*Hosts-a*" subnet we chose to assign (32-22=10) 10 bits for the hosts part, so that the number of IP available was closer to the one ask in the requirements
+- "-2" is because in every network there are 2 unavailable IP, one for network and one for broadcast
 
 ## Set a VLAN
 
@@ -172,11 +172,11 @@ We decided to use vlans for the networks "*Hosts-A*" and "*Hosts-B*", so we can 
 
 # Vagrantfile
 
-This is an example extract from the Vagrantfile, that show how Vagrant create a new VM, based on our settings.
+This is an example extract from the Vagrantfile, that shows how Vagrant create a new VM, based on our settings.
 
 We modified 2 things:
 - at line 5 we change the path of the .sh file for every VM, linking the correct configuration file for every machine
-- at line 7 we increase the memory just for Host-c, because it is "hosting" the docker and need a bit more energy
+- at line 7 we increase the memory just for Host-c, because it is "hosting" the docker and need a bit more "energy"
 
 ```
 1   config.vm.define "host-c" do |hostc|
@@ -231,7 +231,7 @@ ip route add 10.0.8.0/22 via 10.0.12.2 dev enp0s9
 
 What does this code mean?
 
-1. Installing tcpdump for debug and sniffing purposes
+1. Install tcpdump for debug and sniffing purposes
 2. Enable IP forwarding
 3. Add IP address to the interface linked to router-2 and set it "up"
 4. Create a subinterface for VLAN 5
@@ -270,7 +270,7 @@ ip route add 10.0.4.0/24 via 10.0.12.1 dev enp0s9
 
 What does this code mean?
 
-1. Installing tcpdump for debug and sniffing purposes
+1. Install tcpdump for debug and sniffing purposes
 2. Enable IP forwarding
 3. Add IP address to the interfaces and set them "up"
 4. Delete the dafault gateway
@@ -306,9 +306,9 @@ ip link set enp0s10 up
 
 What does this code mean?
 
-1. Installing tcpdump, openvswitch and curl
-2. Creates a new bridge "br0"
-3. Creates a trunk port and set interface up
+1. Install tcpdump, openvswitch and curl
+2. Create a new bridge "br0"
+3. Create a trunk port and set interface up
 4. Add a port on the bridge with tag=5 (VLAN 5) and set the interface up
 5. Add a port on the bridge with tag=6 (VLAN 6) and set the interface up
 
@@ -335,10 +335,10 @@ ip route add default via 10.0.0.1
 
 What does this code mean?
 
-1. Installing tcpdump for debug and sniffing purposes
+1. Install tcpdump for debug and sniffing purposes
 2. Add IP address to the interface and set it "up"
 3. Delete the default gateway
-4. Sets the default gateway on router-1
+4. Set the default gateway on router-1
 
 ## HOST-B
 
@@ -363,10 +363,10 @@ ip route add default via 10.0.4.1
 
 What does this code mean?
 
-1. Installing tcpdump for debug and sniffing purposes
+1. Install tcpdump for debug and sniffing purposes
 2. Add IP address to the interface and set it "up"
 3. Delete the default gateway
-4. Sets the default gateway on router-1
+4. Set the default gateway on router-1
 
 ## HOST-C
 
@@ -422,7 +422,7 @@ host-b                    running (virtualbox)
 host-c                    running (virtualbox)
 ```
 
-If your terminal display something different just uninstall the setup with ```vagrant destroy``` and try the installation process again.
+If your terminal displays something different just uninstall the setup with ```vagrant destroy``` and try the installation process again.
 
 5. Once your environment is up and running you can log into every single VM just by typing ```vagrant ssh VMname``` , changing "VMname" with the name of the VM which you want to move into. For example if you want to navigate to router-1 you have to type:
 
@@ -485,11 +485,11 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-Here we have "enp0s3" that links our VM to the Ethernet card of our PC; enp0s8 is the interface that link the host-a with the switch and "lo" is an imaginary interface, that is briefly, the local-host 
+Here we have "enp0s3" that links our VM to the Ethernet card of our PC; enp0s8 is the interface that links the host-a with the switch and "lo" is an imaginary interface, that is the local-host 
 
 7. ```route -nve``` 
 
-This command show on the terminal the routing table of the VM. This is an example of the command on host-a:
+This command shows on the terminal the routing table of the VM. This is an example of the command on host-a:
 
 ```
 vagrant@host-a:~$ route -nve
@@ -503,7 +503,7 @@ Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
 
 8. ```ping "IPaddress"```
 
-In this command you have to change "IPaddress" with the actual IP address of the interface you want to reach. For example if you want to ping host-c from host-a you have to type on terminal ```ping 10.0.8.2``` and this is the output:
+In this command you have to change "IPaddress" with the actual IP address of the interface you want to reach. For example if you want to ping host-c from host-a you have to type in terminal ```ping 10.0.8.2``` and this is the output:
 
 ```
 vagrant@host-a:~$ ping 10.0.8.2
